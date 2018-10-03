@@ -114,11 +114,14 @@ const styles = StyleSheet.create({
     paddingTop: 30,
   },
   headerContainer: {
+    paddingTop: 16,
+    paddingBottom: 16,
     alignItems: 'center',
-    backgroundColor: colors.blue,
+    backgroundColor: colors.orange,
   },
   headerText: {
-    color: 'rgba(255, 255, 255, 1)'
+    color: 'rgba(255, 255, 255, 1)',
+    fontSize: 24
   },
   welcomeContainer: {
     alignItems: 'center',
