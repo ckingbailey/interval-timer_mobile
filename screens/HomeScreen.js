@@ -25,22 +25,11 @@ export default class HomeScreen extends React.Component {
             <Text style={styles.headerText}>My Timers</Text>
           </View>
 
-          <View style={styles.welcomeContainer}>
-            <Image
-              source={
-                __DEV__
-                  ? require('../assets/images/robot-dev.png')
-                  : require('../assets/images/robot-prod.png')
-              }
-              style={styles.welcomeImage}
-            />
-          </View>
+          { this._maybeRenderDevelopmentModeBanner() }
 
           <View style={styles.getStartedContainer}>
-            {this._maybeRenderDevelopmentModeWarning()}
-
             <Text style={styles.getStartedText}>
-              Someday this line will be an interval timer
+              My first timer
             </Text>
           </View>
         </ScrollView>
@@ -56,26 +45,18 @@ export default class HomeScreen extends React.Component {
     );
   }
 
-  _maybeRenderDevelopmentModeWarning() {
+  _maybeRenderDevelopmentModeBanner() {
     if (__DEV__) {
       const learnMoreButton = (
-        <Text onPress={this._handleLearnMorePress} style={styles.helpLinkText}>
-          Learn more
-        </Text>
+        <Text onPress={ this._handleLearnMorePress } style={ styles.helpLinkText }>Learn more</Text>
       );
-
+  
       return (
-        <Text style={styles.developmentModeText}>
-          Development mode is enabled, your app will be slower but you can use useful development
-          tools. {learnMoreButton}
-        </Text>
-      );
-    } else {
-      return (
-        <Text style={styles.developmentModeText}>
-          You are not in development mode, your app will run at full speed.
-        </Text>
-      );
+        <View style={styles.developmentBanner}>
+          <Image source={require('../assets/images/robot-dev.png')} style={styles.developmentBannerImage} />
+          <Text style={ styles.developmentModeText }>Dev mode enabled {learnMoreButton}</Text>
+        </View>
+      )
     }
   }
 
@@ -103,6 +84,15 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
   },
+  developmentBanner: {
+    backgroundColor: '#ddd'
+  },
+  developmentModeImage: {
+    width: 160,
+    height: 140,
+    resizeMode: 'stretch',
+    marginRight: 5
+  },
   developmentModeText: {
     marginBottom: 20,
     color: 'rgba(0,0,0,0.4)',
@@ -122,18 +112,6 @@ const styles = StyleSheet.create({
   headerText: {
     color: 'rgba(255, 255, 255, 1)',
     fontSize: 24
-  },
-  welcomeContainer: {
-    alignItems: 'center',
-    marginTop: 10,
-    marginBottom: 20,
-  },
-  welcomeImage: {
-    width: 100,
-    height: 80,
-    resizeMode: 'contain',
-    marginTop: 3,
-    marginLeft: -10,
   },
   getStartedContainer: {
     alignItems: 'center',
