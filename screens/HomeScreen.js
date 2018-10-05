@@ -6,7 +6,7 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
-  View,
+  View
 } from 'react-native';
 import { WebBrowser } from 'expo';
 
@@ -53,8 +53,10 @@ export default class HomeScreen extends React.Component {
   
       return (
         <View style={styles.developmentBanner}>
-          <Image source={require('../assets/images/robot-dev.png')} style={styles.developmentBannerImage} />
-          <Text style={ styles.developmentModeText }>Dev mode enabled {learnMoreButton}</Text>
+            <Text style={ styles.developmentModeText }>
+              <Image source={require('../assets/images/robot-dev-icon.png')} style={styles.developmentBannerImage} />
+              Dev mode enabled {learnMoreButton}
+            </Text>
         </View>
       )
     }
@@ -85,16 +87,11 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
   developmentBanner: {
+    paddingTop: 10,
+    paddingBottom: 12,
     backgroundColor: '#ddd'
   },
-  developmentModeImage: {
-    width: 160,
-    height: 140,
-    resizeMode: 'stretch',
-    marginRight: 5
-  },
   developmentModeText: {
-    marginBottom: 20,
     color: 'rgba(0,0,0,0.4)',
     fontSize: 14,
     lineHeight: 19,
