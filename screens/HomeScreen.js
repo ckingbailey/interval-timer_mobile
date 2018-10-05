@@ -12,9 +12,9 @@ import { WebBrowser } from 'expo';
 
 import { MonoText } from '../components/StyledText';
 
-Data = require('../data/dummyTimers.json');
-Timers = Data.timers;
-Intervals = Data.intervals;
+const data = require('../data/dummyTimers.json');
+const timers = data.timers;
+const intervals = data.intervals;
 
 export default class HomeScreen extends React.Component {
   constructor(props) {
@@ -30,13 +30,13 @@ export default class HomeScreen extends React.Component {
 
   renderTimerList() {
     return this.state.timers.map(timerID => {
-      return <Text style={ styles.getStartedText } key={ timerID }>{ timerID }</Text>
+      return <Text style={ styles.getStartedText } key={ timerID }>{ timers[timerID].name }</Text>
     })
   }
 
   componentDidMount() {
     this.setState({
-      timers: Object.keys(Timers)
+      timers: Object.keys(timers)
     })
   }
 
