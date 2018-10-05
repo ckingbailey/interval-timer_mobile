@@ -12,7 +12,9 @@ import { WebBrowser } from 'expo';
 
 import { MonoText } from '../components/StyledText';
 
-import { Timers, Intervals } from '../data/dummyTimers.json';
+Data = require('../data/dummyTimers.json');
+Timers = Data.timers;
+Intervals = Data.intervals;
 
 export default class HomeScreen extends React.Component {
   constructor(props) {
@@ -21,11 +23,18 @@ export default class HomeScreen extends React.Component {
       timers: []
     }
   }
+
   static navigationOptions = {
     header: null,
   };
 
-  componetDidMount() {
+  renderTimerList() {
+    return this.state.timers.map(timerID => {
+      return <Text style={ styles.getStartedText } key={ timerID }>{ timerID }</Text>
+    })
+  }
+
+  componentDidMount() {
     this.setState({
       timers: Object.keys(Timers)
     })
@@ -42,9 +51,7 @@ export default class HomeScreen extends React.Component {
           { this._maybeRenderDevelopmentModeBanner() }
 
           <View style={styles.getStartedContainer}>
-            <Text style={styles.getStartedText}>
-              My first timer
-            </Text>
+            { this.renderTimerList() }
           </View>
         </ScrollView>
 

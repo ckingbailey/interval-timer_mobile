@@ -1,9 +1,17 @@
 {
     "timers": {
-        "1538779317942": {
+        "MTUzODc4MTI2NTUxMA": {
             "name": "My First Timer",
             "intervals": [
             ]
+        },
+        "MTUzODc4MTIxODcxNg": {
+            "name": "Time le Deux",
+            "intervals": []
+        },
+        "MTUzODc4MTI0NzQyNQ": {
+            "name": "Not another timer!",
+            "intervals": []
         }
     },
     "intervals": {
@@ -18,6 +26,10 @@
         "1538779477319": {
             "name": "Spin",
             "duration": "240"
+        },
+        "1538779317942": {
+            "name": "run from zombies",
+            "duration": "1200"
         }
     }
 }
