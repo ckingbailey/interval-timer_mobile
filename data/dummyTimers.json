@@ -1,0 +1,23 @@
+{
+    "timers": {
+        "1538779317942": {
+            "name": "My First Timer",
+            "intervals": [
+            ]
+        }
+    },
+    "intervals": {
+        "1538779438723": {
+            "name": "Leg press",
+            "duration": "60"
+        },
+        "1538779455906": {
+            "name": "Push ups",
+            "duration": "60"
+        },
+        "1538779477319": {
+            "name": "Spin",
+            "duration": "240"
+        }
+    }
+}

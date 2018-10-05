@@ -12,10 +12,24 @@ import { WebBrowser } from 'expo';
 
 import { MonoText } from '../components/StyledText';
 
+import { Timers, Intervals } from '../data/dummyTimers.json';
+
 export default class HomeScreen extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      timers: []
+    }
+  }
   static navigationOptions = {
     header: null,
   };
+
+  componetDidMount() {
+    this.setState({
+      timers: Object.keys(Timers)
+    })
+  }
 
   render() {
     return (
@@ -87,6 +101,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
   developmentBanner: {
+    marginBottom: 16,
     paddingTop: 10,
     paddingBottom: 12,
     backgroundColor: '#ddd'
