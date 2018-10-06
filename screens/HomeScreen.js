@@ -6,16 +6,52 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
-  View,
+  View
 } from 'react-native';
 import { WebBrowser } from 'expo';
 
 import { MonoText } from '../components/StyledText';
 
+const data = require('../data/dummyTimers.json');
+const timers = data.timers;
+const intervals = data.intervals;
+
 export default class HomeScreen extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      timers: []
+    }
+  }
+
   static navigationOptions = {
     header: null,
   };
+
+  tallyTimerTotal(timerID) {
+    const timerData = timers; // timers here is a placeholder. eventually the collection will come from a data API
+    const intervalData = intervals; // same here: intervals is a placeholder. eventually the collection will come from a data API
+
+    return timerData[timerID].intervals.reduce((acc, intervalID) => {
+      return acc += intervalData[intervalID].duration
+    }, 0)
+  }
+
+  renderTimerList() {
+    const timerData = timers; // timers here is a placeholder. eventually the collection will come from a data API
+
+    return this.state.timers.map(timerID => {
+      const totalTime = this.tallyTimerTotal(timerID);
+
+      return <Text style={ styles.getStartedText } key={ timerID }>{ timerData[timerID].name } : { totalTime }</Text>
+    })
+  }
+
+  componentDidMount() {
+    this.setState({
+      timers: Object.keys(timers)
+    })
+  }
 
   render() {
     return (
@@ -25,23 +61,10 @@ export default class HomeScreen extends React.Component {
             <Text style={styles.headerText}>My Timers</Text>
           </View>
 
-          <View style={styles.welcomeContainer}>
-            <Image
-              source={
-                __DEV__
-                  ? require('../assets/images/robot-dev.png')
-                  : require('../assets/images/robot-prod.png')
-              }
-              style={styles.welcomeImage}
-            />
-          </View>
+          { this._maybeRenderDevelopmentModeBanner() }
 
           <View style={styles.getStartedContainer}>
-            {this._maybeRenderDevelopmentModeWarning()}
-
-            <Text style={styles.getStartedText}>
-              Someday this line will be an interval timer
-            </Text>
+            { this.renderTimerList() }
           </View>
         </ScrollView>
 
@@ -56,26 +79,20 @@ export default class HomeScreen extends React.Component {
     );
   }
 
-  _maybeRenderDevelopmentModeWarning() {
+  _maybeRenderDevelopmentModeBanner() {
     if (__DEV__) {
       const learnMoreButton = (
-        <Text onPress={this._handleLearnMorePress} style={styles.helpLinkText}>
-          Learn more
-        </Text>
+        <Text onPress={ this._handleLearnMorePress } style={ styles.helpLinkText }>Learn more</Text>
       );
-
+  
       return (
-        <Text style={styles.developmentModeText}>
-          Development mode is enabled, your app will be slower but you can use useful development
-          tools. {learnMoreButton}
-        </Text>
-      );
-    } else {
-      return (
-        <Text style={styles.developmentModeText}>
-          You are not in development mode, your app will run at full speed.
-        </Text>
-      );
+        <View style={styles.developmentBanner}>
+            <Text style={ styles.developmentModeText }>
+              <Image source={require('../assets/images/robot-dev-icon.png')} style={styles.developmentBannerImage} />
+              Dev mode enabled {learnMoreButton}
+            </Text>
+        </View>
+      )
     }
   }
 
@@ -103,8 +120,13 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
   },
+  developmentBanner: {
+    marginBottom: 16,
+    paddingTop: 10,
+    paddingBottom: 12,
+    backgroundColor: '#ddd'
+  },
   developmentModeText: {
-    marginBottom: 20,
     color: 'rgba(0,0,0,0.4)',
     fontSize: 14,
     lineHeight: 19,
@@ -114,23 +136,14 @@ const styles = StyleSheet.create({
     paddingTop: 30,
   },
   headerContainer: {
+    paddingTop: 16,
+    paddingBottom: 16,
     alignItems: 'center',
-    backgroundColor: colors.blue,
+    backgroundColor: colors.orange,
   },
   headerText: {
-    color: 'rgba(255, 255, 255, 1)'
-  },
-  welcomeContainer: {
-    alignItems: 'center',
-    marginTop: 10,
-    marginBottom: 20,
-  },
-  welcomeImage: {
-    width: 100,
-    height: 80,
-    resizeMode: 'contain',
-    marginTop: 3,
-    marginLeft: -10,
+    color: 'rgba(255, 255, 255, 1)',
+    fontSize: 24
   },
   getStartedContainer: {
     alignItems: 'center',
