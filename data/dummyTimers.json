@@ -3,33 +3,54 @@
         "MTUzODc4MTI2NTUxMA": {
             "name": "My First Timer",
             "intervals": [
+                "1538779438723",
+                "1538779455906",
             ]
         },
         "MTUzODc4MTIxODcxNg": {
             "name": "Time le Deux",
-            "intervals": []
+            "intervals": [
+                "1538779477319",
+                "1538779317942"
+            ]
         },
         "MTUzODc4MTI0NzQyNQ": {
             "name": "Not another timer!",
-            "intervals": []
+            "intervals": [
+                "1538784334804",
+                "1538784334805",
+                "1538784334806"
+            ]
         }
     },
     "intervals": {
         "1538779438723": {
             "name": "Leg press",
-            "duration": "60"
+            "duration": 60
         },
         "1538779455906": {
             "name": "Push ups",
-            "duration": "60"
+            "duration": 60
         },
         "1538779477319": {
             "name": "Spin",
-            "duration": "240"
+            "duration": 240
         },
         "1538779317942": {
             "name": "run from zombies",
-            "duration": "1200"
+            "duration": 1200
+        },
+        "1538784334804": {
+            "name": "stretch your legs",
+            "duration": 120
+        },
+        "1538784334805": {
+            "name": "stretch your neck",
+            "duration": 36
+        },
+        "1538784334806": {
+            "name": "stretch your butt",
+            "duration": 50
         }
     }
 }

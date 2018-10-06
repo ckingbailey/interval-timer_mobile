@@ -28,9 +28,22 @@ export default class HomeScreen extends React.Component {
     header: null,
   };
 
+  tallyTimerTotal(timerID) {
+    const timerData = timers; // timers here is a placeholder. eventually the collection will come from a data API
+    const intervalData = intervals; // same here: intervals is a placeholder. eventually the collection will come from a data API
+
+    return timerData[timerID].intervals.reduce((acc, intervalID) => {
+      return acc += intervalData[intervalID].duration
+    }, 0)
+  }
+
   renderTimerList() {
+    const timerData = timers; // timers here is a placeholder. eventually the collection will come from a data API
+
     return this.state.timers.map(timerID => {
-      return <Text style={ styles.getStartedText } key={ timerID }>{ timers[timerID].name }</Text>
+      const totalTime = this.tallyTimerTotal(timerID);
+
+      return <Text style={ styles.getStartedText } key={ timerID }>{ timerData[timerID].name } : { totalTime }</Text>
     })
   }
 
