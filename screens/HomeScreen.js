@@ -12,44 +12,29 @@ import { WebBrowser } from 'expo';
 
 import { MonoText } from '../components/StyledText';
 
-const data = require('../data/dummyTimers.json');
-const timers = data.timers;
-const intervals = data.intervals;
-
 export default class HomeScreen extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      timers: []
-    }
-  }
-
   static navigationOptions = {
     header: null,
   };
 
   tallyTimerTotal(timerID) {
-    const timerData = timers; // timers here is a placeholder. eventually the collection will come from a data API
-    const intervalData = intervals; // same here: intervals is a placeholder. eventually the collection will come from a data API
+    const timers = this.props.screenProps.timers;
+    const intervals = this.props.screenProps.intervals;
 
-    return timerData[timerID].intervals.reduce((acc, intervalID) => {
-      return acc += intervalData[intervalID].duration
+    return timers[timerID].intervals.reduce((tot, intervalID) => {
+      return tot += intervals[intervalID].duration
     }, 0)
   }
 
   renderTimerList() {
-    const timerData = timers; // timers here is a placeholder. eventually the collection will come from a data API
+    const timers = this.props.screenProps.timers;
+    const timerKeys = Object.keys(timers);
 
-    return this.state.timers.map(timerID => {
+
+    return timerKeys.map(timerID => {
       const totalTime = this.tallyTimerTotal(timerID);
 
-      return <Text style={ styles.getStartedText } key={ timerID }>{ timerData[timerID].name } : { totalTime }</Text>
-    })
-  }
-
-  componentDidMount() {
-    this.setState({
-      timers: Object.keys(timers)
+      return <Text style={ styles.getStartedText } key={ timerID }>{ timers[timerID].name } : { totalTime }</Text>
     })
   }
 

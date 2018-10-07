@@ -3,9 +3,15 @@ import { Platform, StatusBar, StyleSheet, View } from 'react-native';
 import { AppLoading, Asset, Font, Icon } from 'expo';
 import AppNavigator from './navigation/AppNavigator';
 
+const data = require('./data/dummyTimers.json');
+const timers = data.timers;
+const intervals = data.intervals;
+
 export default class App extends React.Component {
   state = {
     isLoadingComplete: false,
+    timers: {},
+    intervals: {}
   };
 
   render() {
@@ -21,10 +27,22 @@ export default class App extends React.Component {
       return (
         <View style={styles.container}>
           {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
-          <AppNavigator />
+          <AppNavigator
+            screenProps = {{
+              timers: this.state.timers,
+              intervals: this.state.intervals
+            }}
+          />
         </View>
       );
     }
+  }
+
+  componentDidMount() {
+    this.setState({
+      timers: timers,
+      intervals: intervals
+    })
   }
 
   _loadResourcesAsync = async () => {
