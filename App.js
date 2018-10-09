@@ -10,6 +10,7 @@ const intervals = data.intervals;
 export default class App extends React.Component {
   state = {
     isLoadingComplete: false,
+    curSetIntervalId: null,
     timers: {},
     intervals: {}
   };
@@ -43,6 +44,77 @@ export default class App extends React.Component {
       timers: timers,
       intervals: intervals
     })
+  }
+
+  startTimer(timerID) {
+    this.setState(prev => {
+      const curSetIntervalId = setInterval(() => decrementInterval, 1000)
+      const firstIntervalID = prev.timers[timerID].intervals[0]
+      const count = prev.intervals[firstIntervalID].duration
+      const curTimer = {
+        id: timerID,
+        curInterval: {
+          count, 
+          id: firstIntervalID
+        }
+      }
+      return { curSetIntervalId, curTimer }
+    })
+
+    this.startNextInterval()
+  }
+
+  startNextInterval() {
+    this.setState(prev => {
+      const nextIntervalIndex = prev.timers[curTimer.id].intervals.indexOf(prev.curTimer.curInterval.id) + 1
+      const nextIntervalId = prev.timers.intervals[nextIntervalIndex]
+      const curTime = this.getTimeSecs()
+      const endTime = curTime + prev.intervals[nextIntervalId].duration
+      const count = endTime - curTime
+
+      return {
+        curTimer: {
+          curInterval: {
+            endTime,
+            count,
+            id: nextIntervalId
+          }
+        }
+      }
+    })
+  }
+
+  decrementInterval() {
+    if (this.state.curInterval.count === this.state.curInterval.endTime) {
+      const curTimer = this.state.timers[this.state.curTimer.id];
+
+      if (this.state.curInterval.id === curTimer.intervals[curTimer.intervals.length - 1]) { // check if this is the last interval for current timer
+        return this.endTimer()
+      }
+      return this.startNextInterval()
+    }
+
+    this.setState(prev => {
+      const count = prev.curInterval.endTime - this.getTimeSecs()
+      return {
+        curTimer: {
+          curInterval: {
+            count
+          }
+        }
+      }
+    })
+  }
+
+  endTimer () {
+    this.setState(prev => {
+      clearInterval(prev.curSetIntervalId)
+      return { curSetIntervalId: null }
+    })
+  }
+
+  getTimeSecs() {
+    return Math.floor(Date.now()/1000)
   }
 
   _loadResourcesAsync = async () => {
