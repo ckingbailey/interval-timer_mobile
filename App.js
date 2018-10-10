@@ -8,6 +8,22 @@ const timers = data.timers;
 const intervals = data.intervals;
 
 export default class App extends React.Component {
+  /* timer and interval data has the shape of:
+  ** timers: {
+  **    Number: {
+  **      name: String,
+  **      intervals: [ Numbers ]
+  **    },
+  **    ....
+  ** },
+  ** intervals: {
+  **    Number: {
+  **      name: String,
+  **      duration: Number,
+  **    },
+  **    ....
+  **  }
+  */
   state = {
     isLoadingComplete: false,
     curSetIntervalId: null,
@@ -47,29 +63,52 @@ export default class App extends React.Component {
   }
 
   startTimer(timerID) {
-    this.setState(prev => {
+    this.setState(state => {
       const curSetIntervalId = setInterval(() => decrementInterval, 1000)
-      const firstIntervalID = prev.timers[timerID].intervals[0]
-      const count = prev.intervals[firstIntervalID].duration
+      const initialIntervalID = state.timers[timerID].intervals[0]
+      const count = state.intervals[initialIntervalID].duration
+      const endTime = this.getTimeSecs() + count
       const curTimer = {
         id: timerID,
         curInterval: {
+          endTime,
           count, 
-          id: firstIntervalID
+          id: initialIntervalID
         }
       }
       return { curSetIntervalId, curTimer }
     })
+  }
 
-    this.startNextInterval()
+  decrementInterval() {
+    if (this.getTimeSecs() >= this.state.curInterval.endTime) { // check if this interval is done
+      const curTimer = this.state.timers[this.state.curTimer.id];
+
+      if (this.state.curTimer.curInterval.id === curTimer.intervals[curTimer.intervals.length - 1]) { // check if this is the last interval for current timer
+        return this.endTimer()
+      }
+      return this.startNextInterval()
+    }
+
+    this.setState(state => {
+      const count = state.curTimer.curInterval.endTime - this.getTimeSecs()
+      return {
+        curTimer: {
+          curInterval: {
+            count
+          }
+        }
+      }
+    })
   }
 
   startNextInterval() {
-    this.setState(prev => {
-      const nextIntervalIndex = prev.timers[curTimer.id].intervals.indexOf(prev.curTimer.curInterval.id) + 1
-      const nextIntervalId = prev.timers.intervals[nextIntervalIndex]
+    this.setState(state => {
+      const curTimer = state.timers[state.curTimer.id]
+      const nextIntervalIndex = curTimer.intervals.indexOf(state.curTimer.curInterval.id) + 1
+      const nextIntervalId = curTimer.intervals[nextIntervalIndex]
       const curTime = this.getTimeSecs()
-      const endTime = curTime + prev.intervals[nextIntervalId].duration
+      const endTime = curTime + state.intervals[nextIntervalId].duration
       const count = endTime - curTime
 
       return {
@@ -84,31 +123,9 @@ export default class App extends React.Component {
     })
   }
 
-  decrementInterval() {
-    if (this.state.curInterval.count === this.state.curInterval.endTime) {
-      const curTimer = this.state.timers[this.state.curTimer.id];
-
-      if (this.state.curInterval.id === curTimer.intervals[curTimer.intervals.length - 1]) { // check if this is the last interval for current timer
-        return this.endTimer()
-      }
-      return this.startNextInterval()
-    }
-
-    this.setState(prev => {
-      const count = prev.curInterval.endTime - this.getTimeSecs()
-      return {
-        curTimer: {
-          curInterval: {
-            count
-          }
-        }
-      }
-    })
-  }
-
   endTimer () {
-    this.setState(prev => {
-      clearInterval(prev.curSetIntervalId)
+    this.setState(state => {
+      clearInterval(state.curSetIntervalId)
       return { curSetIntervalId: null }
     })
   }
